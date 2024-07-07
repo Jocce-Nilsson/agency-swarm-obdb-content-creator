@@ -1,0 +1,114 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Open Brewery Database",
+    "description": "Find Breweries and public information on breweries, cideries, brewpubs, and bottleshops around the world",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.openbrewerydb.org/v1",
+      "description": "Main production server"
+    }
+  ],
+  "paths": {
+    "/breweries": {
+      "get": {
+        "summary": "List all breweries",
+        "operationId": "getBreweries",
+        "description": "Returns a paginated list of breweries",
+        "parameters": [
+          { "name": "by_ids", "in": "query", "schema": { "type": "string" }, "description": "Comma-separated list of brewery IDs" },
+          { "name": "by_name", "in": "query", "schema": { "type": "string" }, "description": "Filter breweries by name" },
+          { "name": "by_city", "in": "query", "schema": { "type": "string" }, "description": "Filter breweries by city" },
+          { "name": "by_dist", "in": "query", "schema": { "type": "string" }, "description": "Sort the results by distance from an origin point, denoted by latitude,longitude" },
+          { "name": "by_postal", "in": "query", "schema": { "type": "string" }, "description": "Filter breweries by postal code" },
+          { "name": "by_state", "in": "query", "schema": { "type": "string" }, "description": "Filter breweries by state" },
+          { "name": "by_country", "in": "query", "schema": { "type": "string" }, "description": "Filter breweries by country" },
+          { "name": "by_type", "in": "query", "schema": { "type": "string", "enum": ["micro", "nano", "regional", "brewpub", "large", "planning", "bar", "contract", "proprietor", "closed"] }, "description": "Filter by type of brewery" },
+          { "name": "page", "in": "query", "schema": { "type": "integer" }, "description": "The offset or page of breweries to return" },
+          { "name": "per_page", "in": "query", "schema": { "type": "integer" }, "description": "Number of breweries to return each call" },
+          { "name": "sort", "in": "query", "schema": { "type": "string", "enum": ["asc", "desc"] }, "description": "Sort the results by one or more fields" }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of breweries",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Brewery" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/breweries/{id}": {
+      "get": {
+        "operationId": "getBreweryById",
+        "description": "Returns a single brewery by ID",
+        "summary": "Get a single brewery",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "A single brewery",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Brewery" }
+              }
+            }
+          },
+          "404": { "description": "Brewery not found" }
+        }
+      }
+    },
+    "/breweries/search": {
+      "get": {
+        "operationId": "searchBreweries",
+        "description": "Search for breweries based on a search term",
+        "summary": "Search for breweries based on a search term",
+        "parameters": [
+          { "name": "query", "in": "query", "required": true, "schema": { "type": "string" }, "description": "Search term" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Brewery" }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Brewery": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "brewery_type": { "type": "string" },
+          "street": { "type": "string" },
+          "city": { "type": "string" },
+          "state": { "type": "string" },
+          "postal_code": { "type": "string" },
+          "country": { "type": "string" },
+          "longitude": { "type": "string" },
+          "latitude": { "type": "string" },
+          "phone": { "type": "string" },
+          "website_url": { "type": "string" }
+        }
+      }
+    }
+  }
+}
