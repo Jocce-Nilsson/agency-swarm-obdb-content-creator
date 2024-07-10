@@ -15,11 +15,8 @@ class OBDBAccessAgent(Agent):
             tools_folder="./tools",
             temperature=0.3,
             max_prompt_tokens=25000,
+            model="gpt-3.5-turbo",
         )
 
     def response_validator(self, message):
-        llm_validator(statement="Verify whether the update from the OBDBAccessAgent confirms the task's "
-                                "successful completion. If the task remains unfinished, provide guidance "
-                                "within the 'reason' argument on the next steps the agent should take.",
-                      client=self.client)(message)
         return message

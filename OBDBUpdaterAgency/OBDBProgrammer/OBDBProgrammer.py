@@ -5,11 +5,11 @@ from agency_swarm.tools import FileSearch
 from instructor import llm_validator
 
 
-class Devid(Agent):
+class OBDBProgrammer(Agent):
     def __init__(self):
         super().__init__(
-            name="Devid",
-            description="Devid is an AI software engineer capable of performing advanced coding tasks.",
+            name="OBDBProgrammer",
+            description="OBDBProgrammer is an AI software engineer capable of performing advanced coding tasks.",
             instructions="./instructions.md",
             files_folder="./files",
             schemas_folder="./schemas",

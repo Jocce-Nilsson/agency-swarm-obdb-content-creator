@@ -1,5 +1,7 @@
 from agency_swarm.agents import Agent
 
+from GoogleSearchAgent.tools.GoogleSearchTool import GoogleSearchTool
+
 
 class GoogleSearchAgent(Agent):
     def __init__(self):
@@ -14,7 +16,6 @@ class GoogleSearchAgent(Agent):
             temperature=0.3,
             max_prompt_tokens=25000,
         )
-        from OBDBUpdaterAgency.GoogleSearchAgent.tools.GoogleSearchTool import GoogleSearchTool
         GoogleSearchTool().validate_required_environment_variables()
         
     def response_validator(self, message):

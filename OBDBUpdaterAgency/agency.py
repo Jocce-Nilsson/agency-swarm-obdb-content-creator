@@ -3,12 +3,12 @@ from OBDBManager import OBDBManager
 from OBDBAccessAgent import OBDBAccessAgent
 from OBDBCEO import OBDBCEO
 from BrowsingAgent import BrowsingAgent
-from Devid import Devid
+from OBDBProgrammer import OBDBProgrammer
 from GoogleSearchAgent import GoogleSearchAgent
 
 ceo = OBDBCEO()
 manager = OBDBManager()
-programmer = Devid()
+programmer = OBDBProgrammer()
 browsingAgent = BrowsingAgent()
 dbAccessAgent = OBDBAccessAgent()
 searchAgent = GoogleSearchAgent()

@@ -1,9 +1,10 @@
 from agency_swarm.tools import BaseTool
 from pydantic import Field
 
+
 class TaskAssignmentTool(BaseTool):
     """
-    TaskAssignmentTool is designed to assign tasks to the OBDBProgrammer and OBDBController.
+    TaskAssignmentTool is designed to assign tasks to the OBDBProgrammer and OBDBManager.
     It takes a list of tasks and assigns them to the appropriate agent based on predefined criteria.
     """
 
@@ -14,24 +15,25 @@ class TaskAssignmentTool(BaseTool):
     def run(self):
         """
         The implementation of the run method, where the tool's main functionality is executed.
-        This method assigns tasks to the OBDBProgrammer and OBDBController based on predefined criteria.
+        This method assigns tasks to the OBDBProgrammer and OBDBManager based on predefined criteria.
         """
         # Assign tasks to the appropriate agents
         assignments = self._assign_tasks(self.tasks)
-        
+
         # Return the assignments as a string
         return "\n".join(assignments)
 
     def _assign_tasks(self, tasks):
         """
-        Helper method to assign tasks to the OBDBProgrammer and OBDBController based on predefined criteria.
+        Helper method to assign tasks to the OBDBProgrammer and OBDBManager based on predefined criteria.
         """
         # Initialize lists to hold tasks for each agent
         programmer_tasks = []
         controller_tasks = []
 
         # Define criteria for task assignment
-        programmer_keywords = ['develop', 'code', 'program', 'implement']
+        programmer_keywords = ['develop', 'code', 'program', 'implement', 'GitHub', 'check-in', 'pull request', 'merge',
+                               'commit', 'create', 'write', 'debug', 'test', 'build', 'deploy', 'release']
         controller_keywords = ['manage', 'control', 'oversee', 'monitor']
 
         # Iterate through each task and assign it to the appropriate agent
@@ -39,12 +41,12 @@ class TaskAssignmentTool(BaseTool):
             if any(keyword in task.lower() for keyword in programmer_keywords):
                 programmer_tasks.append(f"OBDBProgrammer: {task}")
             elif any(keyword in task.lower() for keyword in controller_keywords):
-                controller_tasks.append(f"OBDBController: {task}")
+                controller_tasks.append(f"OBDBManager: {task}")
             else:
-                # If no specific keywords are found, assign to a default agent (e.g., OBDBController)
-                controller_tasks.append(f"OBDBController: {task}")
+                # If no specific keywords are found, assign to a default agent (e.g., OBDBManager)
+                controller_tasks.append(f"OBDBManager: {task}")
 
         # Combine the assignments into a single list
         assignments = programmer_tasks + controller_tasks
-        
+
         return assignments
