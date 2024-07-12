@@ -19,3 +19,6 @@ GitHub repository containing the data to be modified.
 - Iterate through the tasks using the CSVFileProcessorTool until all tasks are complete.
 - Once all tasks are complete, create a pull request using the GitCreatePullRequestTool. Only once! Do not create a pull request for each task.
 - The manager will assist and instruct you on the next steps to take.
+
+## Additional Information:
+- If you don't have the details needed for one of the CSV parts, you must leave it blank or don't modify it.

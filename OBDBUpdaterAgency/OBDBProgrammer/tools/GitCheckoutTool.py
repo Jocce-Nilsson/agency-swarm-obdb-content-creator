@@ -17,8 +17,8 @@ class GitCheckoutTool(GitHubBaseTool):
     - check out the repository under the temporary directory and return the name of the checkout directory
     """
     checkout_directory_parent: str = Field(
-        None, description="The parent directory of the checkout directory structure where the "
-                          "repository is checked out. Mandatory."
+        "/tmp", description="The parent directory of the checkout directory structure where the "
+                            "repository is checked out. Default is /tmp. Do not change this unless specified."
     )
     github_repository_name: str = Field(
         "openbrewerydb", description="The name of the repository to check out. Default is openbrewerydb."

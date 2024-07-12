@@ -14,10 +14,10 @@ manage task assignments, and report to the OBDBCEO regarding progress and any is
 6. For each of the breweries in the list, iterate the following:
 7. Inform OBDBCEO and user that the brewery which is being processed.
 8. Ask OBDBAccessAgent to check if the brewery name is already in the database. If it is, skip it and move on to next.
-9. Instruct browsingAgent to gather details needed for the CSV file from the URL provided
+9. Instruct ScrapingAgent to gather details needed for the CSV file from the URL provided
    Details needed:
    name,brewery_type,address,city,state or province,postal code,country,phone number,website url,longitude,latitude
-   Instructions for BrowsingAgent is to find the above details from the official website of the brewery, normally details are found on contact pages.
+   Instructions for ScrapingAgent is to find the above details from the official website of the brewery, normally details are found on contact pages.
    Note: for breweries in Sweden, use the site:ratsit.se to get longitude and latitude
 10. If the details are not found on the official website, instruct the GoogleSearchAgent to search for the details on other websites.
     You may instruct GoogleSearchAgent to search for the brewery name and the Swedish word 'longitud' to find the longitude and latitude.
