@@ -1,7 +1,9 @@
-from agency_swarm.tools import BaseTool
 import os
 
+from git import Repo
 from pydantic import Field
+
+from OBDBProgrammer.other.GitHubBaseTool import GitHubBaseTool
 
 HEADER = 'id,name,brewery_type,address_1,address_2,city,state_province,postal_code,country,phone,' \
          'website_url,longitude,latitude'
@@ -19,18 +21,17 @@ class BreweryType:
     CLOSED = "closed"  # A location which has been closed.
 
 
-class FileProcessorTool(BaseTool):
+class CSVFileProcessorTool(GitHubBaseTool):
     """
-    FileProcessorTool is designed to update or create CSV files with brewery information in the format:
+    CSVFileProcessorTool is a tool to update or create CSV files of a repository with brewery information in format:
     id,name,brewery_type,address_1,address_2,address_3,city,state_province,postal_code,country,phone,website_url,longitude,latitude
-    Mandatory fields are name, city, state_province, country, and brewery_type.
-    In order to create or update a file, the tool requires the checkout directory where the git repository is located.
-    Individual file names are expected in the format: checkout_directory/country/state_province.csv
+    Mandatory fields are checkout_directory, name, city, state_province, country, and brewery_type.
+
+    The tool will:
+    - investigate if target file exists or not
+    - create or update target file with brewery information
     """
 
-    checkout_directory: str = Field(
-        None, description="The checkout directory where the repository is located. Mandatory."
-    )
     KEY_COLUMN: int = 1  # Name is the key
     name: str = Field(
         None, description="The name of the brewery. Mandatory."
@@ -68,6 +69,9 @@ class FileProcessorTool(BaseTool):
     latitude: str = Field(
         "", description="The latitude for the brewery."
     )
+    checkout_directory: str = Field(
+        None, description="The name of the repository checkout directory. Mandatory."
+    )
 
     @staticmethod
     def validate_mandatory_field(field_name, value):
@@ -82,25 +86,6 @@ class FileProcessorTool(BaseTool):
             BreweryType.CLOSED
         ]) is False:
             raise ValueError(f"Invalid brewery type: {type_str}")
-
-    def run(self, **kwargs):
-        # Validation makes the tool more robust and easy to correct
-        self.validate_mandatory_field("name", self.name)
-        self.validate_mandatory_field("brewery_type", self.brewery_type)
-        self.validate_brewery_type(self.brewery_type)
-        self.validate_mandatory_field("city", self.city)
-        self.validate_mandatory_field("state_province", self.state_province)
-        self.validate_mandatory_field("country", self.country)
-        self.validate_mandatory_field("checkout_directory", self.checkout_directory)
-        self.validate_file_exists(self.checkout_directory)
-        # The checking and adding
-        file_path = os.path.join(self.checkout_directory, self.country, self.state_province + ".csv")
-        if (self.check_file_exists(file_path)) is True:
-            data_dict = self.read_file(file_path)
-            if self.name not in data_dict:
-                self.append_to_file(file_path)
-        else:
-            self.write_to_new_file(file_path)
 
     @staticmethod
     def check_file_exists(file_path: str):
@@ -143,9 +128,50 @@ class FileProcessorTool(BaseTool):
                 file.write('\n')
             file.write(self.create_data_line())
 
+    def run(self, **kwargs):
+        # Validation makes the tool more robust and easy to correct
+        self.validate_mandatory_field("name", self.name)
+        self.validate_mandatory_field("brewery_type", self.brewery_type)
+        self.validate_brewery_type(self.brewery_type)
+        self.validate_mandatory_field("city", self.city)
+        self.validate_mandatory_field("state_province", self.state_province)
+        self.validate_mandatory_field("country", self.country)
+        self.validate_mandatory_field("checkout_directory", self.checkout_directory)
+        self.validate_file_exists(self.checkout_directory)
+        self.validate_file_exists(self.checkout_directory + "/data")
+        repo = Repo(self.checkout_directory)
+        self.get_current_branch(repo)
+        github = self.get_github()
+        # Checking and adding
+        updated = False
+        relative_file_path = os.path.join("data", self.country.lower(), self.state_province.lower() + ".csv")
+        file_path = os.path.join(self.checkout_directory, relative_file_path)
+        if (self.check_file_exists(file_path)) is True:
+            data_dict = self.read_file(file_path)
+            if self.name not in data_dict:
+                self.append_to_file(file_path)
+                updated = True
+        else:
+            self.write_to_new_file(file_path)
+            updated = True
+        if not updated:
+            repo.close()
+            github.close()
+            print(f"Data for {self.name} already exists in {file_path}")
+            return
+        print(f"Committing changes")
+        repo.git.add(relative_file_path)
+        repo.git.commit("-m", f"Add {self.name} to {relative_file_path}")
+        repo.close()
+        github.close()
+        print(f"Done")
+        return
+
 
 # Example usage
 if __name__ == "__main__":
-    file_processor = FileProcessorTool(name="ABC", brewery_type="micro", city="New York", state_province="NY",
-                                       country="USA", checkout_directory=".")
+    file_processor = CSVFileProcessorTool(name="Nerdbrewing", brewery_type="nano", city="Malmö", state_province="Skåne",
+                                          website_url="https://nerdbrewing.se/", address_1="Norbergsgatan 24",
+                                          postal_code="214 50",
+                                          country="Sweden", checkout_directory="./tmp/dcd75a42-513a-4fcd-b615-0fccfd9d2faa/openbrewerydb/")
     file_processor.run()
