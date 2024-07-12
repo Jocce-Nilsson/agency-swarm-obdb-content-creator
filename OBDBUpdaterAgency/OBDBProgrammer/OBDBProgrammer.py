@@ -18,15 +18,6 @@ class OBDBProgrammer(Agent):
             validation_attempts=1,
             temperature=0,
             max_prompt_tokens=25000,
-            examples=["Create a file for this brewery: name is Islay Ales, brewery_type is micro, "
-                      "address is Islay House Square, city is Bridgend, state_province is Argyll, "
-                      "postal_code is PA44 7NZ, country is Scotland, phone is 1496810014, "
-                      "website_url is https://www.islayales.com/, longitude is -6.2511858, latitude is 55.7845598"
-                      "Based on the input above, you should create or update a CSV file named Argyll.csv "
-                      "in folder Scotland with the header columns (only once in the file, yop row): "
-                      "id,name,brewery_type,address_1,address_2,address_3,city,state_province,postal_code,country,website_url,phone,longitude,latitude",
-                      "and the following data:"
-                      ",Islay Ales,micro,Islay House Square,,,Bridgend,Argyll,PA44 7NZ,Scotland,https://www.islayales.com/,1496810014,-6.2511858,55.7845598"],
         )
 
     @override
