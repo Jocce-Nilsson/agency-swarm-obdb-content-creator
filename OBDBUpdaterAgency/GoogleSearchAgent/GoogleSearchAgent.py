@@ -15,7 +15,6 @@ class GoogleSearchAgent(Agent):
             tools_folder="./tools",
             temperature=0.3,
             max_prompt_tokens=25000,
-            model="gpt-3.5-turbo",
         )
         GoogleSearchTool().validate_required_environment_variables()
         
