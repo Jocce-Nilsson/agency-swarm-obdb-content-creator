@@ -1,3 +1,5 @@
+import time
+
 from agency_swarm.tools import BaseTool
 from pydantic import Field
 from googleapiclient.discovery import build
@@ -37,6 +39,7 @@ class GoogleSearchTool(BaseTool):
         if not self.query:
             # Query is required for GoogleSearchTool, throw an error if not provided
             raise ValueError("Query is required for GoogleSearchTool.")
+        time.sleep(10)
         service = build("customsearch", "v1", developerKey=self.key)
         res = (service.cse().list(q=self.query, cx=self.cx, num=10, start=1).execute())
         result_list = [{'title': item['title'], 'link': item['link'], 'snippet': item['snippet']} for item in res['items']]

@@ -1,7 +1,11 @@
+import time
+
 from agency_swarm import BaseTool
 from pydantic import Field
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
+
+visit_log: list[str] = []
 
 
 class ScrapingTool(BaseTool):
@@ -16,6 +20,10 @@ class ScrapingTool(BaseTool):
     def run(self, **kwargs):
         if not self.url:
             raise ValueError("URL is required for ScrapingTool.")
+        if self.url in visit_log:
+            raise ValueError("URL has already been visited.")
+        visit_log.append(self.url)
+        time.sleep(10)
         html_page = urlopen(self.url)
         html_text = html_page.read().decode("utf-8")
         soup = BeautifulSoup(html_text, "html.parser")

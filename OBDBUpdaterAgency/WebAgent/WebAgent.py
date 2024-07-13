@@ -1,13 +1,11 @@
-from agency_swarm.agents import Agent
-
-from GoogleSearchAgent.tools.GoogleSearchTool import GoogleSearchTool
+from agency_swarm import Agent
 
 
-class GoogleSearchAgent(Agent):
+class WebAgent(Agent):
     def __init__(self):
         super().__init__(
-            name="GoogleSearchAgent",
-            description="Agent for searching the web",
+            name="WebAgent",
+            description="Agent for searching and reading web pages",
             instructions="./instructions.md",
             files_folder="./files",
             schemas_folder="./schemas",
@@ -16,7 +14,6 @@ class GoogleSearchAgent(Agent):
             temperature=0.3,
             max_prompt_tokens=25000,
         )
-        GoogleSearchTool().validate_required_environment_variables()
-        
+
     def response_validator(self, message):
         return message

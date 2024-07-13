@@ -3,21 +3,18 @@ from OBDBManager import OBDBManager
 from OBDBAccessAgent import OBDBAccessAgent
 from OBDBCEO import OBDBCEO
 from OBDBProgrammer import OBDBProgrammer
-from GoogleSearchAgent import GoogleSearchAgent
-from ScrapingAgent import ScrapingAgent
+from WebAgent import WebAgent
 
 ceo = OBDBCEO()
 manager = OBDBManager()
 programmer = OBDBProgrammer()
-scrapingAgent = ScrapingAgent()
+webAgent = WebAgent()
 dbAccessAgent = OBDBAccessAgent()
-searchAgent = GoogleSearchAgent()
 
 agency = Agency([ceo, manager,
                  [ceo, manager],
                  [manager, programmer],
-                 [manager, searchAgent],
-                 [manager, scrapingAgent],
+                 [manager, webAgent],
                  [manager, dbAccessAgent],
                  ],
                 shared_instructions='./agency_manifesto.md',  # shared instructions for all agents
