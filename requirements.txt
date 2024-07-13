@@ -1,0 +1,11 @@
+agency_swarm==0.2.5
+beautifulsoup4==4.12.3
+GitPython==3.1.43
+GitPython==3.1.43
+google_api_python_client==2.136.0
+instructor==1.3.4
+pydantic==2.8.2
+PyGithub==2.3.0
+PyGithub==2.3.0
+typing_extensions==4.12.2
+Unidecode==1.3.8
