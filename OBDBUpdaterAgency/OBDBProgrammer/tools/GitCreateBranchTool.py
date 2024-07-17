@@ -5,6 +5,8 @@ from git import Repo
 from pydantic import Field
 from unidecode import unidecode
 
+branch_name = ""
+
 
 class GitCreateBranchTool(BaseTool):
     """
@@ -37,6 +39,10 @@ class GitCreateBranchTool(BaseTool):
         return f"csvcreator/{desc}"
 
     def run(self):
+        global branch_name
+        if branch_name:
+            print(f"Branch already exists: {branch_name}")
+            return branch_name
         if not self.checkout_directory:
             raise ValueError("Field checkout_directory is required for GitCreateBranchTool.")
         if not os.path.exists(self.checkout_directory):

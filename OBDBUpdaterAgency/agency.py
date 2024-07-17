@@ -15,6 +15,7 @@ agency = Agency([ceo, manager,
                  [ceo, manager],
                  [manager, programmer],
                  [manager, webAgent],
+                 [programmer, webAgent],
                  [manager, dbAccessAgent],
                  ],
                 shared_instructions='./agency_manifesto.md',  # shared instructions for all agents

@@ -5,6 +5,8 @@ from pydantic import Field
 
 from OBDBProgrammer.other.GitHubBaseTool import GitHubBaseTool
 
+target_directory: str = ""
+
 
 class GitCheckoutTool(GitHubBaseTool):
     """
@@ -28,6 +30,11 @@ class GitCheckoutTool(GitHubBaseTool):
     )
 
     def run(self):
+        global target_directory
+        if target_directory:
+            print(f"Already checked out repository {self.github_repository_owner}/{self.github_repository_name} into "
+                  f"directory: {target_directory}")
+            return target_directory
         if not self.checkout_directory_parent:
             raise ValueError("Field checkout_directory_parent is required for GitCheckoutTool.")
         if not os.path.exists(self.checkout_directory_parent):

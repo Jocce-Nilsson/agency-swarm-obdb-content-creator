@@ -1,8 +1,9 @@
 import os
+from urllib.error import URLError, HTTPError
 
 from git import Repo
 from pydantic import Field
-
+from urllib.request import urlopen
 from OBDBProgrammer.other.GitHubBaseTool import GitHubBaseTool
 
 HEADER = 'id,name,brewery_type,address_1,address_2,city,state_province,postal_code,country,phone,' \
@@ -85,11 +86,22 @@ class CSVFileProcessorTool(GitHubBaseTool):
             BreweryType.LARGE, BreweryType.PLANNING, BreweryType.CONTRACT, BreweryType.PROPRIETOR,
             BreweryType.CLOSED
         ]) is False:
-            raise ValueError(f"Invalid brewery type: {type_str}")
+            raise ValueError(f"Invalid brewery type: {type_str}, must be one of {BreweryType.__dict__.values()}")
 
     @staticmethod
     def check_file_exists(file_path: str):
         return os.path.exists(file_path)
+
+    @staticmethod
+    def validate_url(url: str):
+        if not url.startswith("http://") and not url.startswith("https://"):
+            raise ValueError(f"Invalid URL: {url}")
+        try:
+            urlopen(url)
+        except HTTPError as e:
+            raise ValueError(f"URL {url} is not reachable.")
+        except URLError as e:
+            raise ValueError(f"URL {url} has errors: {e.reason}.")
 
     def validate_file_exists(self, file_path: str):
         if not self.check_file_exists(file_path):
@@ -139,6 +151,8 @@ class CSVFileProcessorTool(GitHubBaseTool):
         self.validate_mandatory_field("checkout_directory", self.checkout_directory)
         self.validate_file_exists(self.checkout_directory)
         self.validate_file_exists(self.checkout_directory + "/data")
+        if self.website_url:
+            self.validate_url(self.website_url)
         repo = Repo(self.checkout_directory)
         self.get_current_branch(repo)
         github = self.get_github()
@@ -164,8 +178,7 @@ class CSVFileProcessorTool(GitHubBaseTool):
         repo.git.commit("-m", f"Add {self.name} to {relative_file_path}")
         repo.close()
         github.close()
-        print(f"Done")
-        return
+        return f"Done"
 
 
 # Example usage
@@ -173,5 +186,6 @@ if __name__ == "__main__":
     file_processor = CSVFileProcessorTool(name="Nerdbrewing", brewery_type="nano", city="Malmö", state_province="Skåne",
                                           website_url="https://nerdbrewing.se/", address_1="Norbergsgatan 24",
                                           postal_code="214 50",
-                                          country="Sweden", checkout_directory="./tmp/dcd75a42-513a-4fcd-b615-0fccfd9d2faa/openbrewerydb/")
+                                          country="Sweden",
+                                          checkout_directory="./tmp/dcd75a42-513a-4fcd-b615-0fccfd9d2faa/openbrewerydb/")
     file_processor.run()

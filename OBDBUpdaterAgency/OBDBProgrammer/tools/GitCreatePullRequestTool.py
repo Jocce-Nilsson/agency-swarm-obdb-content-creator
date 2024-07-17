@@ -1,9 +1,10 @@
 import os
 import uuid
 
-from git import Repo
+from git import Repo, InvalidGitRepositoryError
 from pydantic import Field
 
+from OBDBManager.other.BreweryListBaseTool import BreweryListBaseTool
 from OBDBProgrammer.other.GitHubBaseTool import GitHubBaseTool
 
 
@@ -47,9 +48,14 @@ class GitCreatePullRequestTool(GitHubBaseTool):
             raise ValueError("Field description is required for GitCreatePullRequestTool.")
         if len(self.description) < 10:
             raise ValueError("Field description must be at least 10 characters long.")
-        if len(self.description) > 30:
-            raise ValueError("Field description must be at most 30 characters long.")
-        repo = Repo(self.checkout_directory)
+        if len(self.description) > 50:
+            raise ValueError("Field description must be at most 50 characters long.")
+        if not BreweryListBaseTool.is_brewery_list_empty():
+            raise ValueError("Brewery list is not empty, please finish processing CSV files first.")
+        try:
+            repo = Repo(self.checkout_directory)
+        except InvalidGitRepositoryError as e:
+            raise ValueError(f"{self.checkout_directory} is not a valid git repository. Run GitCheckoutTool first.")
         # validate and get branch name
         current_branch = self.get_current_branch(repo)
         # check for uncommitted changes
@@ -79,6 +85,6 @@ class GitCreatePullRequestTool(GitHubBaseTool):
 
 # Example usage
 if __name__ == "__main__":
-    tool = GitCreatePullRequestTool(checkout_directory="./tmp/dcd75a42-513a-4fcd-b615-0fccfd9d2faa/openbrewerydb",
+    tool = GitCreatePullRequestTool(checkout_directory="/tmp/",
                                     description="Add Skåne, Sweden")
     tool.run()

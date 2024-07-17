@@ -13,7 +13,6 @@ class OBDBCEO(Agent):
             tools_folder="./tools",
             temperature=0.3,
             max_prompt_tokens=25000,
-            model="gpt-3.5-turbo",
         )
         
     def response_validator(self, message):

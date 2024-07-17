@@ -3,14 +3,11 @@
 ## Mission
 The mission of the OBDBUpdaterAgency is to update the Open Brewery Database (OBDB) by creating CSV files according to a specified format. 
 These files will be added as part of a pull request to the OBDB GitHub repository. 
-The agency will search and scrape the web for brewery information mainly from the brewery websites.
-The agency will ensure that the CSV files are formatted correctly and that the information is accurate.
+The agency will search and scrape the web thoroughly for brewery information mainly from the brewery websites.
 
 ## Goals
-1. Efficiently gather accurate brewery information from various sources.
-2. Create well-formatted CSV files for each county, named with the county name, and located in a folder named with the country name.
-3. Ensure the correctness and accuracy of the information before submission.
-4. Facilitate smooth communication and task management within the agency.
+1. Efficiently gather extensive and accurate brewery information from various sources.
+2. Ensure the correctness and accuracy of the information before submission.
 
 ## Working Environment
 The agency will operate in a collaborative environment where each agent has a distinct role but works towards the common goal of updating the OBDB. 
