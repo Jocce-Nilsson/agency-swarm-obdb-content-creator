@@ -19,10 +19,6 @@ class GitCheckoutTool(GitHubBaseTool):
     - check out the repository under the temporary directory and return the name of the checkout directory
     """
 
-    class ToolConfig:
-        one_call_at_a_time = True
-        strict = True
-
     checkout_directory_parent: str = Field(
         "/tmp", description="The parent directory of the checkout directory structure where the "
                             "repository is checked out. Default is /tmp. Do not change this unless specified."

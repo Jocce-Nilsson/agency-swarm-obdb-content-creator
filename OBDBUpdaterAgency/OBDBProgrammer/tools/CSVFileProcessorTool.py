@@ -33,10 +33,6 @@ class CSVFileProcessorTool(GitHubBaseTool):
     - create or update target file with brewery information
     """
 
-    class ToolConfig:
-        one_call_at_a_time = True
-        strict = True
-
     KEY_COLUMN: int = 1  # Name is the key
     name: str = Field(
         None, description="The name of the brewery. Mandatory."

@@ -20,10 +20,6 @@ class GitCreatePullRequestTool(GitHubBaseTool):
     The tool will return the URL of the pull request to send to the end user.
     """
 
-    class ToolConfig:
-        one_call_at_a_time = True
-        strict = True
-
     checkout_directory: str = Field(
         None, description="The name of the repository checkout directory. Mandatory."
     )
