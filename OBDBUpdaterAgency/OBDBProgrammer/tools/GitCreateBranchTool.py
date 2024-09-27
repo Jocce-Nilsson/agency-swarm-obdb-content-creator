@@ -18,6 +18,11 @@ class GitCreateBranchTool(BaseTool):
     finally spaces are replaced with underscores to form last part of the branch name.
     - The tool returns the name of the branch created.
     """
+
+    class ToolConfig:
+        one_call_at_a_time = True
+        strict = True
+
     checkout_directory: str = Field(
         None, description="The name of the repository checkout directory. Mandatory."
     )

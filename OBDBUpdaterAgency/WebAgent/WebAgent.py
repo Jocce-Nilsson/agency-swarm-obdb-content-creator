@@ -13,6 +13,7 @@ class WebAgent(Agent):
             tools_folder="./tools",
             temperature=0.3,
             max_prompt_tokens=25000,
+            model="gpt-4o",
         )
 
     def response_validator(self, message):

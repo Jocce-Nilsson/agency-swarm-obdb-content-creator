@@ -18,6 +18,7 @@ class OBDBProgrammer(Agent):
             validation_attempts=1,
             temperature=0,
             max_prompt_tokens=25000,
+            model="gpt-4o",
         )
 
     @override
